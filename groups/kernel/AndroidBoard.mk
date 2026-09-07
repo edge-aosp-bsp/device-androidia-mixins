@@ -6,7 +6,7 @@ PREBUILT_KERNEL_ROOT := vendor/intel/utils_priv/kernel/prebuilts/6.6/{{{prebuilt
 endif
 endif
 
-TARGET_KERNEL_CLANG_VERSION := r530567
+TARGET_KERNEL_CLANG_VERSION := r596125
 CLANG_PREBUILTS_PATH := $(abspath $(INTEL_PATH_DEVICE)/../../../prebuilts/clang)
 
 ifneq ($(TARGET_KERNEL_CLANG_VERSION),)
@@ -38,16 +38,9 @@ BOARD_DTB := $(LOCAL_KERNEL_PATH)/{{{board_dtb}}}
 DTB ?= $(BOARD_DTB)
 {{/build_dtbs}}
 
-ifeq ($(BASE_LTS2023_CHROMIUM_KERNEL), true)
-  LOCAL_KERNEL_SRC := {{{lts2023_chromium_src_path}}}
-  KERNEL_CONFIG_PATH := $(TARGET_DEVICE_DIR)/{{{lts2023_chromium_cfg_path}}}
-else ifeq ($(BASE_LINUX_INTEL_LTS2023_KERNEL), true)
-  LOCAL_KERNEL_SRC := {{{linux_intel_lts2023_src_path}}}
-  KERNEL_CONFIG_PATH := $(TARGET_DEVICE_DIR)/{{{linux_intel_lts2023_cfg_path}}}
-  ENABLE_I915_OOT_MODULE_LOADING := true
-else ifeq ($(BASE_LTS2024_ANDROID_KERNEL), true)
-  LOCAL_KERNEL_SRC := {{{lts2024_android_src_path}}}
-  KERNEL_CONFIG_PATH := $(TARGET_DEVICE_DIR)/{{{lts2024_android_cfg_path}}}
+ifeq ($(BASE_LINUX_INTEL_LTS2025_KERNEL), true)
+  LOCAL_KERNEL_SRC := {{{linux_intel_lts2025_src_path}}}
+  KERNEL_CONFIG_PATH := $(TARGET_DEVICE_DIR)/{{{linux_intel_lts2025_cfg_path}}}
 else
   LOCAL_KERNEL_SRC := {{{src_path}}}
   EXT_MODULES := {{{external_modules}}}
@@ -217,7 +210,7 @@ endif
 	$(hide) for f in dwc3.ko dwc3-pci.ko xhci-hcd.ko xhci-pci.ko; do \
 		find $(LOCAL_KERNEL_PATH)/lib/modules/ -name $$f -exec cp {} $(TARGET_RECOVERY_ROOT_OUT)/$(KERNEL_MODULES_ROOT)/ \; ;\
 		done
-ifneq ($(BASE_LTS2024_ANDROID_KERNEL), true)
+ifneq ($(BASE_LINUX_INTEL_LTS2025_KERNEL), true)
 ifeq ($(TARGET_PREBUILT_KERNEL), true)
 	echo "Copying mei modules from prebuilt"
 #mei for recovery
@@ -314,7 +307,7 @@ endef
 $(foreach v,$(BOARD_DTB_VARIANTS),$(eval $(call board_dtb_per_variant,$(v))))
 {{/build_dtbs}}
 
-ifneq ($(BASE_LTS2024_ANDROID_KERNEL), true)
+ifneq ($(BASE_LINUX_INTEL_LTS2025_KERNEL), true)
 {{#i915_ag_mods_version}}
 
 I915_AG_ADDITIONS_PATH := ../modules/intel-gpu-i915-backports
